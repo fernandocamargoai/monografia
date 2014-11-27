@@ -1,0 +1,100 @@
+\documentclass[relatorio, abnt]{inf-ufg}
+% Opções da classe inf-ufg (ao usar mais de uma, separe por vírgulas)
+%   [tese]         -> Tese de doutorado.
+%   [dissertacao]  -> Dissertação de mestrado (padrão).
+%   [monografia]   -> Monografia de especialização.
+%   [relatorio]    -> Relatório final de graduação.
+%   [abnt]         -> Usa o estilo "abnt-alf" de citação bibliográfica.
+%   [nocolorlinks] -> Os links de navegação no texto ficam na cor preta.
+%                     Use esta opção para gerar o arquivo para impressão
+%                     da versão final do seu texto!!!
+
+%----------------------------------------------------- INICIO DO DOCUMENTO %
+\begin{document}
+
+%------------------------------------------ AUTOR, TÍTULO E DATA DE DEFESA %
+\autor{Fernando Camargo} % (José da Silva)
+\autorR{Camargo, Fernando} % (da Silva, José)
+
+\titulo{Título do Trabalho}
+%\subtitulo{Subtítulo do Trabalho}
+
+\cidade{Goiânia} % Nome da cidade em foi desenvolvido o trabalho
+\dia{14} %
+\mes{12} % Data da apresentação/defesa do trabalho
+\ano{2014} % Formato numérico: \dia{01}, \mes{01} e \ano{2009}
+
+%-------------------------------------------------------------- ORIENTADOR %
+\orientador{Weber Martins, PhD}
+\orientadorR{Martins, Weber}
+% Use os comandos a seguir se for Orientadora e nao Orientador.
+%\orientadora{ Nome da Orientadora}
+%\orientadoraR{ Nome Reverso da Orientadora}
+
+%\coorientador{ Nome do Co-orientador}
+%\coorientadorR{ Nome Reverso do Co-orientador}
+% Use os comandos a seguir se for Co-orientadora e nao Coorientador.
+%\coorientadora{ Nome da Co-orientadora}
+%\coorientadoraR{ Nome Reverso da Co-orientadora}
+
+%-------------------------------------------------- INSTITUIÇÃO E PROGRAMA %
+\universidade{Universidade Federal de Goiás} % {Universidade Federal de Goiás}
+\uni{UFG}         % UFG
+\unidade{Escola de Engenharia Elétrica, Mecânica e de Computação} %Instituto de Informática
+%\departamento{ Nome do Departamento} %Unidades com mais de um depto.
+
+%\universidadeco{ Nome da Universidade do Co-orientador}
+%\unico{ Sigla da Universidade do Co-orientador}
+%\unidadeco{ Nome da Unidade Acadêmica do Co-orientador}
+
+\programa{Engenharia de Computação} % Computação
+\concentracao{Engenharia de Computação}
+
+%-------------------------------------------------- ELEMENTOS PRÉ-TEXTUAIS %
+\capa    % Gera o modelo da capa externa do trabalho
+\publica % Gera a autorização para publicação em formato eletrônico
+\rosto   % Primeira folha interna do trabalho
+
+\input{./pre/pre_aprovacao}
+\input{./pre/pre_direitos}
+\input{./pre/pre_dedicatoria}
+\input{./pre/pre_agradecimentos}
+\input{./pre/pre_epigrafe}
+\input{./pre/pre_resumo}
+\input{./pre/pre_abstract}
+
+\tabelas[figtab]
+%Opções:
+%nada [] -> Gera apenas o sumário
+%fig     -> Gera o sumário e a lista de figuras
+%tab     -> Sumário e lista de tabelas
+%alg     -> Sumário e lista de algoritmos
+%cod     -> Sumário e lista de códigos de programas
+%
+% Pode-se usar qualquer combinação dessas opções.
+% Por exemplo:
+%  figtab       -> Sumário e listas de figuras e tabelas
+%  figtabcod    -> Sumário e listas de figuras, tabelas e
+%                  códigos de programas
+%  figtabalg    -> Sumário e listas de figuras, tabelas e algoritmos
+%  figtabalgcod -> Sumário e listas de figuras, tabelas, algoritmos e
+%                  códigos de programas
+
+%--------------------------------------------------------------- CAPÍTULOS %
+\input{./tex/cap_I}
+
+%------------------------------------------------------------ BIBLIOGRAFIA %
+\cleardoublepage
+\nocite{*} %%% Retire esta linha para gerar a bibliografia com apenas as
+           %%% referências usadas no seu texto!
+\arial
+\bibliography{./bib/monografia} %%% Nomes dos seus arquivos .bib
+\label{ref-bib}
+
+%--------------------------------------------------------------- APÊNDICES %
+\apendices
+
+%\input{./pos/apend_I}
+%\input{./pos/apend_II}
+
+\end{document}
