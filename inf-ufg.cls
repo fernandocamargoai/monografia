@@ -432,7 +432,7 @@
   pdfsubject={\@concentracao}
  }
 
- \modelo%
+ %\modelo%
  \singlespacing%
  \begin{titlepage}%
   \textoC{1}{\Large \scshape \@universidade \normalsize \upshape}%
