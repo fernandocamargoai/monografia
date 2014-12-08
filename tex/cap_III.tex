@@ -1,3 +1,255 @@
 \chapter{Sistema Proposto}
-\label{cap:sistema-proposto}
+\label{cap:sistema}
 
+Como indicado anteriormente, será considerado que a ferramenta proposta esteja concluída e que deseja-se implementar o sistema de lembretes automáticos para a mesma. Nessa ferramenta são armazenados todos os dados necessários sobre execuções anteriores, incluindo o exato momento de início e fim, a meta executada e sua categoria. Com esse histórico de execuções realizadas pelo usuário, espera-se que o sistema proposto consiga ter uma boa suposição sobre o melhor horário em que o usuário deverá executar determinada meta agendada. Portanto, o sistema a ser proposto terá como entrada o histórico de execuções e a meta agendada, devendo exibir como saída um horário o qual a ferramenta deverá lembrar o usuário sobre sua meta pendente.
+
+Ao analisar a entrada e saída esperada, chegou-se à conclusão que o problema é muito complexo para uma solução direta. Um sistema que resolvesse o problema todo em um único passo seria complexo demais. Portanto, decidiu-se dividir o problema em duas partes, solucionando-as separadamente. A primeira parte do problema será julgar o quão relevante é cada execução do histórico em relação à meta agendada. Ou seja, cada execução será comparada com a meta agendada e lhe será dada um peso que indica o quão relevante ela é em nossa previsão. Depois desse passo, a segunda parte do problema será encontrar uma interseção de tempo com maior peso entre as execuções do histórico. Com essa interseção encontrada, será retornado o tempo de início desse intervalo de tempo como resposta ao problema como um todo.
+
+Cada subdivisão do problema será tratada a seguir, demonstrando como foi resolvida.
+
+\section{Avaliação de relevância do histórico de execuções}
+
+Antes de mostrar a solução utilizada, deve-se entender o que torna uma execução passada mais relevante do que outra. Como cada execução possui informações sobre a meta executada, sua categoria e momento de início e fim, essas são as informações disponíveis para avaliar o quão relevante ela é em relação a uma nova meta agendada. Com essas informações, foi decidido que as seguintes características seriam determinantes na avaliação de relevância:
+
+\begin{itemize}
+  \item Categoria da meta executada.
+  \item Meta executada.
+  \item Dia da semana da execução.
+  \item Número da semana do ano em que foi feita a execução.
+\end{itemize}
+
+Essas características estão disponíveis não só nas execuções passadas presentes no histórico, mas também na nova meta agendada. Portanto, deve ser feita uma comparação e as execuções mais semelhantes à meta agendada serão consideradas mais relevantes.
+
+As duas primeiras características observadas são em relação à categoria e a meta executada. Nesse caso, será feita apenas uma comparação de igualdade. Uma execução de mesma categoria receberá mais relevância. Uma de mesma meta, e automaticamente mesma categoria, será considerada ainda mais relevante. Como não há uma medida de proximidade entre categorias e metas distintas, a única comparação disponível é de igualdade. Mas para o dia da semana e o número da semana do ano, pode-se realizar comparações de proximidade entre elas.
+
+Antes de falar sobre a comparação dessas características, deve-se justificar porque elas foram extraídas da data de execução e da meta marcada. Em relação ao dia da semana, essa característica foi utilizada devido à grande ligação que as pessoas têm com o ciclo semanal, como foi explicado no Capítulo \ref{cap:intro}. Como a semana forma um ciclo que se repete ao longo do tempo, espera-se que a disponibilidade de horários do usuário esteja fortemente ligada a esse ciclo.
+
+A outra característica temporal desejada é que execuções mais antigas recebam menos relevância do que execuções mais recentes. Para essa métrica, poderia ser utilizada a quantidade de dias passados desde a execução sendo avaliada. Porém, isso poderia afetar a métrica semanal, visto que é mais relevante algo realizado no mesmo dia da semana, há uma semana atrás, do que algo realizado há três dias atrás. Portanto, para não interferir na avaliação de relevância dada pelo dia da semana, foi escolhido o número da semana do ano. Dessa forma, a perda de relevância das execuções acontece no decorrer das semanas e não de forma tão acelerada quanto seria caso fosse utilizado a quantidade de dias.
+
+Para esclarecer essa métrica de número da semana do ano, vale saber existe uma divisão do ano em que se consideram as semanas no lugar dos meses. Cada ano tem entre 52 e 53 semanas, que são enumeradas de 1 até 53. Como é possível que uma semana atravesse um ano, o primeiro dia do ano não será considerado exatamente na primeira semana do ano, podendo estar presente na última semana do ano anterior.
+
+Com as duas características temporais explicadas, resta definir qual métrica de distância será utilizada entre elas. No caso do dia da semana, uma opção seria utilizar uma comparação de igualdade, dando mais relevância apenas para execuções realizadas no mesmo dia da semana da meta agendada. Porém, com essa comparação, seriam pedidas informações sobre a ligação entre os dias da semana. As duas características básicas que ligam um dia da semana a outro é ser ou não final de semana e quantos dias de diferença existe entre um dia e outro da semana. Para exemplificar, Segunda-feira está dois dias de distância da Quarta-feira e ambas não são finais de semana. Se compararmos segunda com domingo, apesar de haver apenas um dia separando os dois, domingo é final de semana e Segunda-feira não. Também é importante notar que essa relação de quantidade de dias que separa cada dia da semana é circular. Portanto, considera-se a menor distância entre dois dias, o que torna a simples subtração do número do dia da semana inviável, pois faria parecer que segunda e domingo estão separados por sei dias, ao invés de apenas um, por exemplo.
+
+Para considerar essas duas características a serem comparadas em relação ao dia da semana, decidiu-se criar uma tabela de distâncias. Com essa tabela, poderá ser consultada qual a distância entre dois dias da semana. Essa distância deverá incluir a distância em dias e também o fato de ser ou não final de semana. Uma primeira versão dessa tabela, que considera apenas a distância em quantidade de dias de forma circular é apresentada na Tabela \ref{tab:distanciasDiasDaSemana1}.
+
+\begin{table*}[hb]
+\centering
+\caption{Tabela de distâncias entre os dias da semana.}
+\label{tab:distanciasDiasDaSemana1}
+\begin{tabular}{|l|c|c|c|c|c|c|c|}
+  \hline & \textbf{Segunda} & \textbf{Terça} & \textbf{Quarta} & \textbf{Quinta} & \textbf{Sexta} & \textbf{Sábado} & \textbf{Domingo}\\
+  \hline \textbf{Segunda} & 0 & 1 & 2 & 3 & 3 & 2 & 1\\
+  \hline \textbf{Terça} & 1 & 0 & 1 & 2 & 3 & 3 & 2\\
+  \hline \textbf{Quarta} & 2 & 1 & 0 & 1 & 2 & 3 & 3\\
+  \hline \textbf{Quinta} & 3 & 2 & 1 & 0 & 1 & 2 & 3\\
+  \hline \textbf{Sexta} & 3 & 3 & 2 & 1 & 0 & 1 & 2\\
+  \hline \textbf{Sábado} & 2 & 3 & 3 & 2 & 1 & 0 & 1\\
+  \hline \textbf{Domingo} & 1 & 2 & 3 & 3 & 2 & 1 & 0\\
+  \hline
+\end{tabular}
+\end{table*}
+
+Como pode-se notar nessa tabela, a distância entre os dias da semana é circular. Outra característica interessante é que forma-se uma matriz simétrica, em que a diagonal principal é toda zerada, visto que a distância entre um dia da semana e ele mesmo é zero. Começando pelo próprio dia da semana, que possui distância zero, a distância vai sendo incrementada de valor um até atingir seu valor máximo de três. Depois disso, esse valor é repetido e a distância vai sendo decrementada novamente. Essas características fazem com que seja possível a criação de um algoritmo que preencha esse tipo de matriz com distâncias circulares, como pode ser observado no Código \ref{code:generateDistances}.
+
+\begin{center}
+ \begin{minipage}{0.9\textwidth}
+  \begin{codigo}[H]
+   \small
+   \VerbatimInput[xleftmargin=10mm,numbers=left,obeytabs=true]{./prog/generateDistances.java}
+   \caption{\texttt{generateDistances()} }
+   \label{code:generateDistances}
+  \end{codigo}
+ \end{minipage}
+\end{center}
+
+No caso da Tabela \ref{tab:distanciasDiasDaSemana1}, o método mostrado no Código \ref{code:generateDistances} seria invocado passando como parâmetro um $n$ de valor 7 (para os 7 dias da semana), $baseDistance$ de valor 1 (para uma distância unitária entre os dias da semana) e o terceiro parâmetro $distances$ seria uma matriz vazia a ser preenchida pelo método. A invocação desse método retorna a distância máxima de 3 para essa invocação.
+
+A Tabela \ref{tab:distanciasDiasDaSemana1} reflete bem as distâncias entre os dias da semana, mas não inclui outra informação importante: se determinado dia da semana é ou não final de semana. Para incluir isso na tabela, pode-se distanciar sábado e domingo dos demais dias da semana, fazendo com que eles fiquem mais próximos entre si e mais distantes de outros dias que não são considerados finais de semana. No caso, foi considerado o aumento unitário nessa distância, gerando a nova versão da tabela, que é mostrada na Tabela \ref{tab:distanciasDiasDaSemana2}.
+
+\begin{table*}[hb]
+\centering
+\caption{Tabela de distâncias entre os dias da semana, incluindo uma distância extra para os finais de semana.}
+\label{tab:distanciasDiasDaSemana2}
+\begin{tabular}{|l|c|c|c|c|c|c|c|}
+  \hline & \textbf{Segunda} & \textbf{Terça} & \textbf{Quarta} & \textbf{Quinta} & \textbf{Sexta} & \textbf{Sábado} & \textbf{Domingo}\\
+  \hline \textbf{Segunda} & 0 & 1 & 2 & 3 & 3 & 3 & 2\\
+  \hline \textbf{Terça} & 1 & 0 & 1 & 2 & 3 & 4 & 3\\
+  \hline \textbf{Quarta} & 2 & 1 & 0 & 1 & 2 & 4 & 4\\
+  \hline \textbf{Quinta} & 3 & 2 & 1 & 0 & 1 & 3 & 4\\
+  \hline \textbf{Sexta} & 3 & 3 & 2 & 1 & 0 & 2 & 3\\
+  \hline \textbf{Sábado} & 3 & 4 & 4 & 3 & 2 & 0 & 1\\
+  \hline \textbf{Domingo} & 2 & 3 & 4 & 4 & 3 & 1 & 0\\
+  \hline
+\end{tabular}
+\end{table*}
+
+Nessa nova tabela, pode-se perceber que a distância entre Segunda-feira e Domingo passou de 1 para 2. Da mesma forma, a distância entre os finais de semana e os não finais de semana todas foram incrementadas pelo valor unitário. Assim, conseguimos representar as duas informações necessárias através de uma simples tabela de distâncias que poderá ser rapidamente consultada pelo algoritmo.
+
+Da mesma forma que existe uma relação circular entre as distâncias dos dias da semana, também existe a mesma relação entre os número da semana do ano. Dessa forma, a subtração desse número não retorna uma medida verdadeira da distância. Para exemplificar, pode-se considerar a semana 50 e a 10. Se considerarmos a subtração, a distância seria de 40. Por outro lado, considerando o efeito circular e que existem até 53 semanas no ano, essa diferença seria de 13. Portanto, uma tabela de distâncias, como a Tabela \ref{tab:distanciasDiasDaSemana1} criada para os dias da semana, deve ser criada para as semanas do ano. Como não há outra característica que relacione as semanas do ano, a invocação do método apresentado no Código \ref{code:generateDistances} com um $n$ igual a 53 e uma $baseDistance$ igual a 1 deverá ser suficiente para gerar a tabela de distâncias desejada.
+
+A grande vantagem na utilização dessas tabelas de distâncias é a velocidade de consulta das mesmas em tempo de execução pelo algoritmo. Porém, podemos encontrar outras vantagens para as mesmas. Além de representarem bem o efeito de distâncias circulares e possuírem grande velocidade de acesso, essas tabelas estarão presentes na memória e poderão ser modificadas. Essa liberdade de modificação pode tanto ser passada para o usuário da ferramenta quanto ser feita de maneira automática e adaptativa. Enquanto a tabela de distâncias entre as semanas do ano dificilmente seriam modificadas, a dos dias de semana ser modificável seria interessante. A construída aqui deverá servir para uso geral, visto que ela considera a distância entre os dias da semana e a informação sobre ser ou não final de semana. Mas, para determinados tipos de usuário, pode ser que determinados dias da semana se assemelhem mais do que outros, não seguindo tão bem a regra criada aqui. Tais usuários poderiam editar a tabela e essa passaria a ser utilizada pelo algoritmo. Outra opção seria utilizar um sistema mais inteligente que tentasse entender como os dias da semana se relacionam para dado usuário de acordo com suas execuções, adaptando a tabela à medida que fosse necessário. Essas melhorias são apenas citadas aqui e serão novamente observadas mais tarde, mas não farão parte do sistema proposto neste trabalho.
+
+Com a medida da distância presente na tabela, deseja-se uma medida de proximidade para se utilizar na fórmula que indicará a relevância de cada execução. Essa medida de proximidade deverá ser oposta à medida de distância, sendo que quanto menor a distância, maior a proximidade, e essa atinge seu valor máximo quando a distância é nula. Para chegar a uma métrica linear para a proximidade e que tenha valor máximo quando a distância tiver valor zero, pode-se subtrair o valor máximo de distância pelo valor de distância encontrado, como na Equação \ref{eq:proximidade}.
+
+\begin{equation}
+  \label{eq:proximidade}
+  \text{proximidade} = \text{distância máxima} - \text{distância}
+\end{equation}
+
+Para o caso de dia da semana, a distância máxima encontrada na tabela é de 4. Utilizando a Equação \ref{eq:proximidade}, chegamos em valores de proximidade que variam entre 4 e 0, assim como os valores de distância. Já no caso de semana do ano, a distância máxima é de 26, o que dá valores de proximidade que variam entre 26 e 0. Como pode-se notar, se esses valores de proximidade forem utilizados de forma direta, a característica de semana do ano acabaria por ter naturalmente mais peso, por exibir valores maiores. Para que o peso dessas duas medidas possa ser controlado de forma igual, normalizamos a proximidade para que ela sempre varie entre 0.0 e 1.0 utilizando a Equação \ref{eq:proximidadeNormalizada}.
+
+\begin{equation}
+  \label{eq:proximidadeNormalizada}
+  \text{proximidade normalizada} = \frac{\text{distância máxima} - \text{distância}}{\text{distância máxima}}
+\end{equation}
+
+Com o uso dessa fórmula, tem-se a proximidade de dia da semana e a proximidade de semana do ano. Para o caso da categoria e da meta, será utilizado um valor binário para essas duas características. Assim, a proximidade de categoria e de meta terão valores de 0 ou 1, sendo 1 para igualdade e 0 para valores diferentes. Assim, chegamos a quatro valores que poderão ser utilizados na fórmula final de relevância:
+
+\begin{itemize}
+  \item Proximidade de categoria (0 ou 1): $pC$
+  \item Proximidade de meta (0 ou 1): $pM$
+  \item Proximidade de dia da semana (entre 0.0 e 1.0): $pD$
+  \item Proximidade de semana do ano (entre 0.0 e 1.0): $pS$
+\end{itemize}
+
+A fórmula mais simples utilizando esses valores seria a apresentada na Equação \ref{eq:relevancia1}, onde $rC$ seria o peso da proximidade de categoria, $rM$ da proximidade de meta, $rD$ da proximidade de dia da semana e $rS$ da proximidade de semana do ano.
+
+\begin{equation}
+  \label{eq:relevancia1}
+  \text{relevância} = rC \times pC + rM \times pM + rD \times pD + rS \times pS
+\end{equation}
+
+Através dessa fórmula da Equação \ref{eq:relevancia1}, pode-se facilmente realizar ajustes através dos valores utilizados nos pesos $rC$, $rM$, $rD$ e $rS$. Depois de testes, esses valores ficaram fixados em 4.0, 3.0, 2.0 e 3.0, respectivamente. Isso faz com que o valor de relevância de uma execução varie entre 0.0 e 12.0.
+
+Apesar dessa fórmula ser satisfatória, ela apresenta um problema: execuções antigas demoram muito para perder sua relevância, o que faz com que o algoritmo leve muito tempo para se adaptar a novos hábitos do usuário. Para resolver esse problema, foi utilizada a fórmula da Equação \ref{eq:relevancia2}. Visto que o valor de $pS$ vai de 0.0 até 1.0, sua multiplicação com os outros fatores cria uma queda mais rápida de relevância à medida que uma execução se torna mais antiga, o que faz com que os resultados se adaptem mais rápido. Utilizando essa fórmula, o Código \ref{code:evaluateWeights} mostra a solução final para essa parte do problema.
+
+\begin{equation}
+  \label{eq:relevancia1}
+  \text{relevância} = (rC \times pC + rM \times pM + rD \times pD) \times pS
+\end{equation}
+
+\begin{center}
+ \begin{minipage}{1.0\textwidth}
+  \begin{codigo}[H]
+   \small
+   \VerbatimInput[xleftmargin=10mm,numbers=left,obeytabs=true]{./prog/evaluateWeights.java}
+   \caption{\texttt{evaluateWeights()} }
+   \label{code:evaluateWeights}
+  \end{codigo}
+ \end{minipage}
+\end{center}
+
+Esse essa listagem do Código \ref{code:evaluateWeights} utiliza elementos não mostrados, mas todos eles podem ser facilmente identificados através de seu nome. Como pode-se notar, esse método ajusta os pesos (ou relevâncias) de cada uma das execuções passadas de acordo com uma futura execução, chamada de $targetExecution$. Ele utiliza as tabelas de distâncias e os valores máximos de distâncias para encontrar os valores de proximidade e os utiliza na fórmula final de acordo com a Equação \ref{eq:relevancia2}.
+
+\section{Busca pelo intervalo de tempo com maior relevância somada}
+
+A segunda parte do problema se assemelha um pouco com o problema de encontrar interseções entre segmentos de linhas que foi apresentado na Seção \ref{sec:intersecoes}. A grande diferença aqui é a redução do plano cartesiano de duas dimensões (x e y) para apenas uma, que é o eixo do tempo. No lugar dos segmentos de linha, teremos intervalos de tempo que se interceptam no eixo de tempo. E ao invés de encontrar todas as interseções, estamos interessados apenas naquela com maior relevância somada.
+
+Para deixar mais claro, a Figura \ref{fig:eixoDeTempo} mostra o eixo de tempo de um dia com 24 horas. Nesse eixo serão dispostas as execuções, desconsiderando a data em que foram realizadas e utilizando apenas a informação de tempo do dia. Para exemplificar, pegamos duas execuções: uma que ocorre entre 17:54:23 e 20:17:52 e outra que ocorre entre 19:20:25 e 23:46:56. Ao dispor os dois intervalos de tempo dessas execuções no eixo de tempo mostrado na Figura \ref{fig:eixoDeTempo}, seria possível verificar uma interseção entre esses dois intervalos, gerando o intervalo que vai de 19:20:25 até 20:17:52. Assim, nota-se a semelhança com o problema das interseções entre segmentos de linhas.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Eixo de tempo mostrando 24 horas do dia.}
+  \includegraphics[width=1.0\textwidth]{./fig/eixoDeTempo}
+  \label{fig:eixoDeTempo}
+\end{figure}
+
+Além da redução da dimensão do problema, outra diferença entre esse problema e o apresentado anteriormente é que, diferentes dos segmentos de linha, os intervalos de tempo das execuções possuem um fator de relevância. Ou seja, apesar da busca por interseções acontecer em uma única dimensão, há uma outra a ser considerada que é o valor de relevância da execução. Interseções entre os intervalos de tempo dessas execuções terão o valor de relevância somados, gerando intervalos de tempo mais relevantes do que os originais. Também é importante notar que uma execução que não possui interseção também poderá ter valor de relevância maior do que uma interseção de outras execuções. Ou seja, a busca a ser realizada não é simplesmente por interseções de maior relevância, mas sim de intervalos de tempo com maior relevância.
+
+Para facilitar a visualização do que está sendo proposto, imagina-se que cada intervalo de tempo é disposto no eixo como se fossem placas de vidro de variado grau de transparência. Quanto maior a opacidade dessas placas de vidro, maior será o valor de sua relevância. Assim, ao visualizar duas placas de vidro de opacidade diferente se sobrepondo, pode-se ver que a interseção entre elas será mais opaca que ambas as placas, de forma a somar as opacidades. Isso pode ser visualizado na Figura \ref{fig:execucoesNoEixo}.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Execuções dispostas no eixo de tempo como placas de vidro com diferentes opacidades.}
+  \includegraphics[width=1.0\textwidth]{./fig/execucoesNoEixo}
+  \label{fig:execucoesNoEixo}
+\end{figure}
+
+No caso da Figura \ref{fig:execucoesNoEixo}, pode-se visualizar ao todo quatro placas de vidro, ou melhor, quatro execuções com suas respectivas relevâncias. Caso a busca pelo intervalo de tempo mais relevante fosse realizado para esse caso, o intervalo encontrado seria aquele da interseção entre a terceira e a quarta execução, que está destacado na Figura \ref{fig:intervaloDestacado}.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Intervalo de maior relevância somada destacado.}
+  \includegraphics[width=1.0\textwidth]{./fig/intervaloDestacado}
+  \label{fig:intervaloDestacado}
+\end{figure}
+
+Após a visualização do problema através dessa analogia, resta criar um algoritmo que encontrará o intervalo correto de tempo. Tal algoritmo implementará a lógica do Sweep Line, que foi visto na seção \ref{sec:sweepline}. Uma linha vertical atravessará o eixo de tempo da esquerda para a direita parando nos pontos de evento. Tais pontos, nesse caso, são os momentos de início e de fim de cada execução, que serão ordenados no eixo de tempo. Esses pontos também armazenarão o valor de relevância da execução a qual ele se refere. As Figura \ref{fig:sweepLineExecucoes1} e \ref{fig:sweepLineExecucoes2} mostram a linha de varredura percorrendo os pontos de evento.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Linha de varredura parando no primeiro ponto de evento.}
+  \includegraphics[width=1.0\textwidth]{./fig/sweepLineExecucoes1}
+  \label{fig:sweepLineExecucoes1}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \caption{Linha de varredura parando no segundo ponto de evento.}
+  \includegraphics[width=1.0\textwidth]{./fig/sweepLineExecucoes2}
+  \label{fig:sweepLineExecucoes2}
+\end{figure}
+
+Devido à simplicidade desse problema em relação ao problema das interseções de segmentos de linha, as estruturas de dados utilizadas também serão mais simples. Para os pontos de eventos, será utilizada uma simples lista ordenada com os pontos. Cada ponto deverá armazenar seu momento no tempo, indicar se é um ponto inicial ou final e armazenar o valor de relevância da execução correspondente. Para o estado da linha de varredura, serão armazenados os melhores pontos de início e de fim encontrados, o valor total de relevância atual, o melhor valor total de relevância encontrado até o momento, e uma flag que indica se o melhor ponto de início acabou de ser encontrado. Com as estruturas de dados definidas, define-se o Algoritmo \ref{alg:findMaximumSummedWeightInterval}.
+
+\medskip
+\begin{center}
+\begin{minipage}{0.92\textwidth}
+\begin{algorithm2e}[H]
+  \DontPrintSemicolon
+  \LinesNumbered
+  \SetAlgoLined
+  \BlankLine
+  \Entrada{vetor $executions$ de todas execuções passadas com seus valores de relevância.}
+  \Saida{intervalo de tempo com maior relevância acumulada.}
+  \BlankLine
+  Inicialize uma fila de eventos vazia $\Omega$. Insira os pontos de início e fim de cada execução, com indicações de ponto inicial ou final e o valor de relevância. Ordene a fila de eventos.\;
+  Inicialize as variáveis que armazenam a soma de relevância atual ($sum$) e a melhor soma encontrada ($bestSum$) com valor $0.0$.\;
+  Inicialize a flag que indica que o melhor ponto inicial foi encontrado ($bestStartPointFound$) com valor $false$.\;
+  \Enqto{$\Omega$ não está vazia}{
+    Obtenha o próximo ponto de evento $p$ em $\Omega$ e o delete.\;
+    \eSe{$p$ é um ponto inicial}{
+      Aumente o valor de $sum$ com o valor de relevância de $p$.\;
+      \Se{$sum > bestSum$}{
+	Armazene $p$ em $bestStartPoint$.\;
+	Ajuste $bestStartPointFound$ para $true$.\;
+	Armazene $sum$ em $bestSum$.\;
+      }
+    }{
+      \Se{$bestStartPointFound$}{
+	Armazene $p$ em $bestEndPoint$.\;
+	Ajuste $bestStartPointFound$ para $false$.\;
+      }
+      Subtraia o valor de $sum$ com o valor de relevância de $p$.\;
+    }
+  }
+  Retorne o intervalo $bestStartPoint$ e $bestEndPoint$ como resultado.\;
+\caption{$FindMaximumSummedWeightInterval(executions)$ \label {alg:findMaximumSummedWeightInterval}}
+\end{algorithm2e}
+\end{minipage}
+\end{center}
+
+A lógica utilizada no Algoritmo \ref{alg:findMaximumSummedWeightInterval} é a mesma do Algoritmo \ref{alg:findIntersections}, com alguns detalhes diferentes. Aqui, não é importante armazenar cada interseção. Ao invés disso, o interesse está em obter o intervalo de tempo com maior valor de relevância somado. Para isso, a linha de varredura para em cada um dos pontos de evento e executa a lógica demonstrada no algoritmo. Além da adição e subtração dos valores de relevância dos pontos, quando esses são pontos de início e de fim, respectivamente, há o teste para verificar se o maior valor foi encontrado. Nesse caso, o ponto de início do intervalo é armazenado e o algoritmo passa a procurar pelo próximo ponto final para fechar esse intervalo. Caso novos pontos de início sejam encontrados antes do próximo ponto de fim, o valor total é incrementado e um novo ponto de início pode substituir o encontrado anteriormente. Dessa forma, garante-se que o intervalo de tempo com maior valor somado de relevância é encontrado.
+
+O Código \ref{code:findMaximumSummedWeightInterval} a seguir mostra a implementação do Algoritmo \ref{alg:findMaximumSummedWeightInterval}. Nessa implementação, Pode-se observar a extração dos pontos de evento das execuções, a adição dos mesmos em uma lista e o ordenamento dessa lista. O estado da linha de varredura é iniciado em seguida e a varredura se inicia passando por cada um dos pontos de evento. Como nesse caso, diferente do caso de interseções entre segmentos de linhas, não há adição de novos eventos em uma fila de prioridade, optou-se pelo uso de uma simples lista e sua iteração. No fim do método, retorna-se um intervalo de tempo com a data passada como parâmetro $targetDate$ e o tempo inicial e final do dia encontrado pelo Sweep Line.
+
+\begin{center}
+ \begin{minipage}{1.0\textwidth}
+  \begin{codigo}[H]
+   \small
+   \VerbatimInput[xleftmargin=10mm,numbers=left,obeytabs=true]{./prog/findMaximumSummedWeightInterval.java}
+   \caption{\texttt{findMaximumSummedWeightInterval()} }
+   \label{code:findMaximumSummedWeightInterval}
+  \end{codigo}
+ \end{minipage}
+\end{center}
+
+\section{Solução final}
+
+Após a divisão do problema em duas partes, resta apenas juntá-las para chegar à solução final. Ou seja, a lista de execuções passadas deve ser recuperada do banco de dados da ferramenta proposta junto com a meta agendada, ambos devem ser passados para o método que atribuirá o valor de relevância para cada execução passada e essas devem ser passadas para o método que encontrará o intervalo de tempo com maior valor de relevância agregado. Por fim, o momento de início desse intervalo obtido é utilizado para agendar uma notificação a ser emitida ao usuário para que ele se lembre da meta agendada.
+
+Com a solução completa, pode-se discutir alguns detalhes da implementação que não foram discutidos. Entre eles está o caso em que múltiplos intervalos de tempo possuem o mesmo valor agregado de relevância. Como nota-se pelo algoritmo, a comparação usada para substituir um intervalo encontrado por outro é apenas o caso de esse novo intervalo possuir maior valor agregado. Portanto, em caso de empate, o primeiro intervalo encontrado será utilizado como resultado. Isso porque considera-se que seria mais interessante ao usuário executar mais cedo suas tarefas, no caso de um empate entre os intervalos. Como a linha vem da esquerda para a direita, o intervalo mais cedo no dia seria retornado caso outros intervalos possuam mesmo valor agregado.
+
+Outro detalhe é que não é possível prever o melhor momento de execução de uma meta se o usuário não possuir nenhuma execução passada armazenada. Para esse caso, nenhuma notificação automática seria agendada. Caso houvesse uma base geral com execuções de todos os usuários, o máximo que poderia ser feito é pesquisar pelas execuções de outros usuários. Porém, haveria uma grande falta de precisão nas notificações. Portanto, é preferível apenas evitar notificações automáticas nesse caso.
+
+Os resultados dos testes feitos com esse sistema proposto serão analisados no Capítulo \ref{cap:resultados}.

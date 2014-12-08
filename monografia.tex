@@ -9,6 +9,9 @@
 %                     Use esta opção para gerar o arquivo para impressão
 %                     da versão final do seu texto!!!
 
+\usepackage{amsmath}
+\usepackage{supertabular}
+
 %----------------------------------------------------- INICIO DO DOCUMENTO %
 \begin{document}
 
@@ -63,7 +66,7 @@
 \input{./pre/pre_resumo}
 \input{./pre/pre_abstract}
 
-\tabelas[figtab]
+\tabelas[figtabalgcod]
 %Opções:
 %nada [] -> Gera apenas o sumário
 %fig     -> Gera o sumário e a lista de figuras
@@ -82,10 +85,10 @@
 
 %--------------------------------------------------------------- CAPÍTULOS %
 \input{./tex/cap_I}
-%\input{./tex/cap_II}
-%\input{./tex/cap_III}
-%\input{./tex/cap_IV}
-%\input{./tex/cap_V}
+\input{./tex/cap_II}
+\input{./tex/cap_III}
+\input{./tex/cap_IV}
+\input{./tex/cap_V}
 
 %------------------------------------------------------------ BIBLIOGRAFIA %
 \cleardoublepage

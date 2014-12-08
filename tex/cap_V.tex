@@ -1,3 +1,18 @@
-\chapter{ConsideraÃ§Ãµes Finais}
-\label{cap:consideracoes-finais}
+\chapter{Considerações Finais}
+\label{cap:consideracoes}
 
+\section{Limitações e dificuldades encontradas}
+
+Ao desenvolver o trabalho, a grande dificuldade encontrada foi em relação a obter dados reais para realização dos testes. Visto que a ferramenta proposta não está pronta para utilização, os dados tiveram que ser criados através de um personagem fictício. Apesar disso, os resultados com os testes realizados utilizando esses dados foram aceitáveis.
+
+Outra dificuldade encontrada foi na implementação das distâncias circulares entre os dias da semana e as semanas do ano. A primeira solução pensada foi a de codificar ambas as informações em código binário e utilizar a distância de Hamming de tal forma que ela tivesse o efeito circular. E para geração desses códigos, foi utilizado um algoritmo genético. No fim, concluiu-se que as tabelas de distância teriam uma implementação mais simples e mais efetiva, o que fez com que a implementação anterior fosse descartada.
+
+\section{Conclusão}
+
+Este trabalho foi iniciando propondo uma ferramenta que pudesse aumentar a produtividade de seus usuários e evitar que os mesmos procrastinassem. Logo em seguida, considerando a existência de tal ferramenta, foi proposto um sistema que deveria trazer ainda mais produtividade aos usuários através de lembretes automáticos. O objetivo de tais lembretes é evitar as inconsistências de preferências as quais os usuários podem passar entre o momento em que os mesmos agendam um lembrete e o momento em que são lembrados da tarefa, o que pode causar um certo desejo de adiar a execução da tarefa.
+
+Considerando esse fim, pode-se dizer que o objetivo do trabalho foi cumprido. Com tal ferramenta proposta e tal sistema proposto neste trabalho, acredita-se que os usuários teriam grandes ganhos de produtividade em suas vidas, aprenderiam a se reeducar na execução de suas metas e conseguiriam evitar a forte tendência à procrastinação.
+
+\section{Trabalhos futuros}
+
+As tabelas utilizadas para indicar a distância entre os dias da semana foram suficientes para o propósito deste trabalho. Porém, uma melhoria a ser feita seria substituir essa tabela por um sistema mais dinâmico, que se adapte à agenda do usuário. Para esse fim, poderia ser utilizada alguma rede neural de aprendizado não supervisionado, de forma que a cada nova execução de tarefa, os dias da semana se aproximassem ou se afastassem mais, de acordo com a utilização do usuário.
