@@ -1,99 +1,96 @@
 
-\chapter{Fundamentação Teórica}
-\label{cap:fundamentacao}
+\chapter{Algoritmo da Linha de Varredura}
+\label{cap:sweepline}
 
-\section{Sweep Line Algorithm}
-\label{sec:sweepline}
-
-Sweep Line Algorithm ou Plane Sweep Algorithm é uma das técnicas chave utilizadas em computação geométrica. Esse algoritmo utiliza-se de uma linha ou plano conceitual de varredura para resolver diversos problemas em espaço Euclidiano. Sua ideia básica é imaginar uma linha horizontal ou vertical que atravessa todo o plano cartesiano, realizando determinado processamento em pontos específicos.
+O Algoritmo da Linha de Varredura (conhecido como \textit{Sweep Line Algorithm} ou \textit{Plane Sweep Algorithm}) é uma das técnicas chave utilizadas em computação geométrica. Esse algoritmo utiliza-se de uma linha ou plano conceitual de varredura para resolver diversos problemas em espaço euclidiano. Sua ideia básica é imaginar uma linha horizontal ou vertical que atravessa todo o plano cartesiano, realizando determinado processamento em pontos específicos.
 
 Dentre suas aplicações em computação geométrica, a primeira e mais simples é para encontrar interseções em um conjunto de segmentos de linha. Essa aplicação será apresentada a seguir, demonstrando a outra opção para resolver esse problema e será feita uma comparação entre as soluções.
 
-\subsection{Interseções em Segmentos de Linhas}
+\section{Interseções em Segmentos de Linhas}
 \label{sec:intersecoes}
 
 Um problema simples a ser resolvido através de computação geométrica é encontrar todas as interseções entre um conjunto de segmento de linhas. \cite{berg2008computationalGeometry} exemplifica o contexto em que resolver esse problema seria útil através de mapas. Em seu exemplo, ele considera como os mapas são divididos em diversas camadas, em que cada uma apresenta determinada informação. Dependendo do que o usuário desejar, diversas camadas podem ser combinadas para se encontrar a informação necessária. Algumas informações divididas em diferentes camadas seriam: estradas, rios, informações demográficas, pontos que indiquem o nome da cidade, entre outros. Em seu exemplo, \cite{berg2008computationalGeometry} utiliza a camada que apresenta as estradas e a que apresenta os rios, procurando os pontos de interseção entre esses dois conjuntos. Após a digitalização do mapa, tanto as estradas como os rios podem ser considerados como uma corrente de segmentos unidos. Assim, esse problema pode ser resolvido por um algoritmo que busque interseções entre os segmentos de linha que formam as estradas e os segmentos de linha que formam os rios.
 
-O algoritmo mais simples para encontrar interseções entre linhas é através de força bruta, em que cada segmento de linha é comparado com todos os outros segmentos de linha a fim de se descobrir se existe uma interseção entre eles. Esse algoritmo claramente possuirá uma complexidade de tempo O($n\textsuperscript{2}$), visto que cada segmento será comparado com todos os outros. No caso em que todos os segmentos tenham interseção com todos os demais segmentos, como mostra a Figura \ref{fig:intersecoesTodosSegmentos} retirada de \cite{berg2008computationalGeometry}, esse algoritmo teria uma performance ótima, já que todas suas comparações seriam efetivas. Porém, em praticamente todos problemas encontrados, essa não é a realidade. Geralmente, existem poucas interseções entre os segmentos de linhas, o que significa que esse algoritmo executará muito mais processamento que o necessário.
+O algoritmo mais simples para encontrar interseções entre linhas utiliza de força bruta, de tal forma que cada segmento de linha é comparado com todos os outros segmentos de linha a fim de se descobrir se existe uma interseção entre eles. Esse algoritmo claramente possuirá uma complexidade de tempo O($n\textsuperscript{2}$), visto que cada segmento será comparado com todos os outros. No caso em que todos os segmentos tenham interseção com todos os demais segmentos, como mostra a Figura \ref{fig:intersecoesTodosSegmentos}, esse algoritmo teria uma performance ótima, já que todas suas comparações seriam efetivas. Porém, em praticamente todos problemas encontrados, essa não é a realidade. Geralmente, existem poucas interseções entre os segmentos de linhas, o que significa que esse algoritmo executará muito mais processamento que o necessário.
 
 \begin{figure}[htb]
   \centering
-  \caption{Exemplo em que todos segmentos de linha possuem interseção com todos os outros.}
+  \caption{Exemplo em que todos segmentos de linha possuem interseção com todos os outros. Fonte: \cite{berg2008computationalGeometry}}
   \includegraphics{./fig/intersecoesTodosSegmentos}
   \label{fig:intersecoesTodosSegmentos}
 \end{figure}
 
 Para evitar que todos os pares de segmentos sejam testados, é desejável um algoritmo que tenha performance sensível à quantidade de interseções, ao invés da quantidade de segmentos de linha. Tal algoritmo deveria diminuir o número de testes utilizando das informações disponíveis. Uma forma clara para reduzir o número de testes seria testar apenas pares de segmentos que estejam próximos, visto que não há chances de interseção entre pares distantes.
 
-Como sugere \cite{berg2008computationalGeometry}, uma forma de visualizar se os segmentos de linha estão próximos ou não pode ser visto na Figura \ref{fig:segmentosY}, retirada do próprio livro. Como pode-se notar, os segmentos são projetados no eixo y e apenas os pares que tenham interseção de intervalos em y terão alguma chance de interseção. Os outros podem ser considerados distantes e não precisam ser testados.
+Como sugere \cite{berg2008computationalGeometry}, uma forma de visualizar se os segmentos de linha estão próximos ou não pode ser visto na Figura \ref{fig:segmentosY}. Como pode-se notar, os segmentos são projetados no eixo y e apenas os pares que tenham interseção de intervalos em y terão alguma chance de interseção. Os outros podem ser considerados distantes e não precisam ser testados.
 
 \begin{figure}[htb]
   \centering
-  \caption{Projeção dos segmentos em y para verificar proximidade entre eles.}
+  \caption{Projeção dos segmentos em y para verificar proximidade entre eles. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/segmentosY}
   \label{fig:segmentosY}
 \end{figure}
 
-Essa ideia pode evoluir ao imaginarmos uma linha imaginária \emph{l} que atravessa o plano de cima para baixo, iniciando acima de todos os segmentos. Enquanto varre-se o plano com essa linha, uma lista com os segmentos que a intercedem é mantida. Esses serão os segmentos a serem testados para verificar uma possível interseção entre eles.
+Essa ideia pode evoluir ao imaginarmos uma linha imaginária $l$ que atravessa o plano de cima para baixo, iniciando acima de todos os segmentos. Enquanto varre-se o plano com essa linha, uma lista com os segmentos que a intercedem é mantida. Esses serão os segmentos a serem testados para verificar uma possível interseção entre eles.
 
-Através de tal algoritmo, pode-se evitar que segmentos distantes sejam testados por interseção, aumentando a performance no tempo de execução. Esse tipo de algoritmo é chamado de \emph{plane sweep algorithm} e a linha \emph{l} é chamada \emph{sweep line}. Ele funciona através da linha de varredura que mantém um estado enquanto atravessa o plano. Esse estado armazena todos os segmentos que estão interceptando essa linha no momento. À medida que a linha se move para baixo, esse estado é atualizado através da adição de novos segmentos e remoção daqueles que não estão mais interceptando a linha. Porém, isso não acontece de forma contínua. Qualquer alteração no estado da linha acontece somente quando ela passa por um ponto de início ou de fim de um dos segmentos de linha, portanto não é necessário que o algoritmo considere sua movimentação de forma constante. Ao invés disso, o algoritmo só terá tarefas a executar nos pontos de evento, que são os pontos finais dos segmentos, como mostra a Figura \ref{fig:pontosEventos} retirada de \cite{berg2008computationalGeometry}.
+Através de tal algoritmo, pode-se evitar que segmentos distantes sejam testados por interseção, aumentando a performance no tempo de execução. Esse tipo de algoritmo é chamado de algoritmo de varredura do plano e a linha $l$ é chamada linha de varredura. Ele funciona através da linha de varredura que mantém um estado enquanto atravessa o plano. Esse estado armazena todos os segmentos que estão interceptando essa linha no momento. À medida que a linha se move para baixo, esse estado é atualizado através da adição de novos segmentos e remoção daqueles que não estão mais interceptando a linha. Porém, isso não acontece de forma contínua. Qualquer alteração no estado da linha acontece somente quando ela passa por um ponto de início ou de fim de um dos segmentos de linha, portanto não é necessário que o algoritmo considere sua movimentação de forma constante. Ao invés disso, o algoritmo só terá tarefas a executar nos pontos de evento, que são os pontos finais dos segmentos, como mostra a Figura \ref{fig:pontosEventos}.
 
 \begin{figure}[htb]
   \centering
-  \caption{Linha de varredura do Sweep Line encontrando um ponto de evento.}
+  \caption{Linha de varredura encontrando um ponto de evento. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/pontosEventos}
   \label{fig:pontosEventos}
 \end{figure}
 
 Seguindo essa ideia de algoritmo, a cada ponto de evento encontrado, haverá uma série de tarefas a serem executadas. Como estamos considerando como pontos de eventos apenas as terminações dos segmentos, cada segmento gerará dois pontos de evento: o ponto superior e o inferior. Quando o ponto superior é encontrado, esse novo segmento é adicionado à lista de segmentos cortados pela linha de varredura. Nesse momento, esse novo segmento é testado com todos os segmentos presentes na lista para encontrar possíveis interseções entre eles. Tais interseções, caso encontradas, são guardadas como resultado do algoritmo. Já no caso de um ponto inferior, o segmento é removido da lista.
 
-Essa forma do algoritmo de Sweep Line, apesar de evitar que todos os pares de segmentos sejam testados, ainda não está em sua forma ótima. Isso porque não considera-se a distância horizontal dos segmentos. No caso em que múltiplos segmentos tenham interseção no eixo x, mas que estejam distantes horizontalmente, vários testes desnecessários serão realizados.
+Essa forma do algoritmo de Linha de Varredura, apesar de evitar que todos os pares de segmentos sejam testados, ainda não está em sua forma ótima. Isso porque não considera-se a distância horizontal dos segmentos. No caso em que múltiplos segmentos tenham interseção no eixo x, mas que estejam distantes horizontalmente, vários testes desnecessários serão realizados.
 
-Uma atualização no algoritmo afim de remover testes desnecessários é passar a testar apenas segmentos vizinhos. Para isso, o estado da linha de varredura deixa de ser uma simples lista de segmentos e passa a ser uma lista ordenada. Dessa forma, cada segmento deverá ser testado com seu vizinho da esquerda e da direita, evitando testes com segmentos distantes. Porém, à medida que segmentos se cruzam, a ordem deles na lista deve ser alterada e eles devem ser testados com seus novos vizinhos. Portanto, um novo tipo de ponto de evento deve ser adicionado ao algoritmo: os pontos de interseção encontrados. Eles são encontrados quando a linha de varredura passa pelo ponto superior de um novo segmento, como mostra a Figura \ref{fig:intersecaoDetectada} retirada do \cite{berg2008computationalGeometry}.
+Uma atualização no algoritmo a fim de remover testes desnecessários é passar a testar apenas segmentos vizinhos. Para isso, o estado da linha de varredura deixa de ser uma simples lista de segmentos e passa a ser uma lista ordenada. Dessa forma, cada segmento deverá ser testado com seu vizinho da esquerda e da direita, evitando testes com segmentos distantes. Porém, à medida que segmentos se cruzam, a ordem deles na lista deve ser alterada e eles devem ser testados com seus novos vizinhos. Portanto, um novo tipo de ponto de evento deve ser adicionado ao algoritmo: os pontos de interseção encontrados. Eles são encontrados quando a linha de varredura passa pelo ponto superior de um novo segmento, como mostra a Figura \ref{fig:intersecaoDetectada}.
 
 \begin{figure}[htb]
   \centering
-  \caption{Interseção detectada quando a linha de varredura encontra o ponto superior do segmento Sj.}
+  \caption{Interseção detectada quando a linha de varredura encontra o ponto superior do segmento Sj. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/intersecaoDetectada}
   \label{fig:intersecaoDetectada}
 \end{figure}
 
-Quando a linha de varredura para no ponto de interseção entre dois segmentos, como mostra a Figura \ref{fig:pontoDeEventoNaIntersecao} retirada do \cite{berg2008computationalGeometry}, o estado é atualizado para refletir a nova ordem entre os segmentos. O segmento que antes estava à esquerda passa para a direita e o que estava à direita para a esquerda. Essa nova ordem faz com que esses segmentos tenham novos vizinhos, como pode ser notado na Figura \ref{fig:novosVizinhos} retirada do \cite{berg2008computationalGeometry}. Aquele que passou para a esquerda deve ser testado com o segmento à sua esquerda na lista e o que passou para a direita com aquele que está à sua direita. Caso uma nova interseção seja encontrada, ela deverá ser adicionada na lista de pontos de evento.
+Quando a linha de varredura para no ponto de interseção entre dois segmentos, como mostra a Figura \ref{fig:pontoDeEventoNaIntersecao}, o estado é atualizado para refletir a nova ordem entre os segmentos. O segmento que antes estava à esquerda passa para a direita e o que estava à direita para a esquerda. Essa nova ordem faz com que esses segmentos tenham novos vizinhos, como pode ser notado na Figura \ref{fig:novosVizinhos}. Aquele que passou para a esquerda deve ser testado com o segmento à sua esquerda na lista e o que passou para a direita com aquele que está à sua direita. Caso uma nova interseção seja encontrada, ela deverá ser adicionada na lista de pontos de evento.
 
 \begin{figure}[htb]
   \centering
-  \caption{Linha de varredura parando no ponto de interseção entre os segmentos Sk e Sl.}
+  \caption{Linha de varredura parando no ponto de interseção entre os segmentos Sk e Sl. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/pontoDeEventoNaIntersecao}
   \label{fig:pontoDeEventoNaIntersecao}
 \end{figure}
 
 \begin{figure}[htb]
   \centering
-  \caption{Após o ponto de interseção entre os segmentos Sk e Sl, eles passam a ter novos vizinhos.}
+  \caption{Após o ponto de interseção entre os segmentos Sk e Sl, eles passam a ter novos vizinhos. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/novosVizinhos}
   \label{fig:novosVizinhos}
 \end{figure}
 
 Com essa versão atualizada do algoritmo, o número de testes entre os segmentos é consideravelmente reduzido, o que melhora o tempo de execução do algoritmo. Com o fim desse esboço, resta detalhar a estrutura de dados utilizada pelo algoritmo e então mostrar a versão final do mesmo.
 
-\subsubsection{Estrutura de dados}
+\subsection{Estrutura de Dados}
 
-O algoritmo de Sweep Line utilizado para encontrar interseções entre segmentos de linha necessita de duas estruturas de dados: uma para armazenar os pontos de eventos e uma para armazenar o estado da linha de varredura. Para os pontos de eventos, utiliza-se uma fila de prioridade que ordena os eventos utilizando uma série de critérios. O primeiro critério, considerando que a linha de varredura venha de cima para baixo, é que o evento seja o mais alto no plano abaixo da linha. No caso em que dois eventos possuam a mesma coordenada y, aquele de menor coordenada x deverá ser retornado primeiro. Ou seja, eventos na horizontal deverão ser tratados da esquerda para a direita.
+O algoritmo de Linha de Varredura utilizado para encontrar interseções entre segmentos de linha necessita de duas estruturas de dados: uma para armazenar os pontos de eventos e uma para armazenar o estado da linha de varredura. Para os pontos de eventos, utiliza-se uma fila de prioridade que ordena os eventos utilizando uma série de critérios. O primeiro critério, considerando que a linha de varredura venha de cima para baixo, é que o evento seja o mais alto no plano abaixo da linha. No caso em que dois eventos possuam a mesma coordenada y, aquele de menor coordenada x deverá ser retornado primeiro. Ou seja, eventos na horizontal deverão ser tratados da esquerda para a direita.
 
-A fila de eventos deverá possibilitar a remoção do próximo evento para que ele seja tratado, respeitando a ordem de prioridade. Além disso, também deverá permitir inserção de novos eventos, visto que os pontos de interseção encontrados durante a execução do algoritmo serão adicionados na fila de eventos. E um outro detalhe é que a inserção deverá ser capaz de verificar se determinado ponto já não existe na fila, para que sejam evitadas colisões de pontos. Devido ao último requisito de verificar se um ponto de evento já está presente na fila, ao invés dessa fila ser implementada com uma simples heap, deve-se utilizar uma estrutura mais complexa como uma balanced binary search tree, que segue a regra de comparação entre os eventos. Outro detalhe é que junto com o ponto de evento deve ser armazenado o segmento correspondente para que o evento possa ser tratado.
+A fila de eventos deverá possibilitar a remoção do próximo evento para que ele seja tratado, respeitando a ordem de prioridade. Além disso, deverá permitir inserção de novos eventos, visto que os pontos de interseção encontrados durante a execução do algoritmo serão adicionados na fila de eventos. E um outro detalhe é que a inserção deverá ser capaz de verificar se determinado ponto já não existe na fila, para que sejam evitadas colisões de pontos. Devido ao último requisito de verificar se um ponto de evento já está presente na fila, ao invés dessa fila ser implementada com uma simples heap, deve-se utilizar uma estrutura mais complexa como uma balanced binary search tree, que segue a regra de comparação entre os eventos. Outro detalhe é que junto com o ponto de evento deve ser armazenado o segmento correspondente para que o evento possa ser tratado.
 
-A outra estrutura de dados necessária deverá manter o estado da linha de varredura. Ou seja, ela deverá permitir a adição e remoção dos segmentos que estão sendo interceptados pela linha. Além disso, ela deverá permitir a pesquisa pelos vizinhos dos segmentos para que esses sejam testados para encontrar interseções. Para isso, usa-se também uma balanced binary search tree, como mostra a Figura \ref{fig:arvoreSegmentos} retirada de \cite{berg2008computationalGeometry}.
+A outra estrutura de dados necessária deverá manter o estado da linha de varredura. Ou seja, ela deverá permitir a adição e remoção dos segmentos que estão sendo interceptados pela linha. Além disso, ela deverá permitir a pesquisa pelos vizinhos dos segmentos para que esses sejam testados para encontrar interseções. Para isso, usa-se uma balanced binary search tree, como mostra a Figura \ref{fig:arvoreSegmentos}.
 
 \begin{figure}[htb]
   \centering
-  \caption{Balanced binary search tree que armazena os segmentos interceptados pela linha de varredura.}
+  \caption{Balanced binary search tree que armazena os segmentos interceptados pela linha de varredura. Fonte: \cite{berg2008computationalGeometry}.}
   \includegraphics{./fig/arvoreSegmentos}
   \label{fig:arvoreSegmentos}
 \end{figure}
 
-\subsubsection{Algoritmo}
+\subsection{Algoritmo}
 
-Com a estrutura de dados definida, resta definir o algoritmo completo. Esse está dividido em três métodos: \ref{alg:findIntersections}, \ref{alg:handleEventPoint} e \ref{alg:findNewEvent}. Tais algoritmos foram retirados de \cite{berg2008computationalGeometry}.
+Com a estrutura de dados definida, resta definir o algoritmo completo. Esse está dividido em três métodos: \ref{alg:findIntersections}, \ref{alg:handleEventPoint} e \ref{alg:findNewEvent}.
 
 \medskip
 \begin{center}
@@ -167,22 +164,22 @@ Com a estrutura de dados definida, resta definir o algoritmo completo. Esse está
 \end{minipage}
 \end{center}
 
-\subsubsection{Performance}
+\subsection{Performance}
 
-Foi visto que a utilização dessa versão final do Sweep Line Algorithm é capaz de evitar uma série de testes entre os pares de segmentos de linha, mas não foi dada uma métrica que comparasse a performance desse algoritmo sobre a comparação de todos os pares. Para que se tenha um noção dos benefícios do Sweep Line Algorithm, suas complexidades de tempo e espaço devem ser comparadas com a do algoritmo de força bruta.
+Foi visto que a utilização dessa versão final do Algoritmo da Linha de Varredura é capaz de evitar uma série de testes entre os pares de segmentos de linha, mas não foi dada uma métrica que comparasse a performance desse algoritmo sobre a comparação de todos os pares. Para que se tenha um noção dos benefícios do Algoritmo da Linha de Varredura, suas complexidades de tempo e espaço devem ser comparadas com a do algoritmo de força bruta.
 
 Dado que $n$ representa a quantidade de interseções, a complexidade de espaço e tempo de uma comparação de todos pares é facilmente encontrada como sendo ambas O($n\textsuperscript{2}$). Porém, os resultados obtidos ainda não são ordenados. Caso deseja-se ordenar os resultados, a complexidade de tempo aumenta para O($n\textsuperscript{2} \log n$).
 
-Quanto ao Sweep Line Algorithm utilizado na solução do mesmo problema, podemos encontrar sua complexidade de espaço observando as duas estruturas de dados utilizadas. Para o estado da varredura, em dado momento ela terá no máximo um segmento armazenado para cada um existente, o que nos dá complexidade O($n$). Enquanto para a fila de eventos, poderá haver $n$ pontos superiores e $n$ pontos inferiores. Além disso, também devemos contar com os pontos de interseção, que existirão no máximo $n-1$. Portanto, a fila de eventos também é O($n$). Com isso, chegamos na complexidade de espaço de O($n$) para o algoritmo.
+Quanto ao Algoritmo da Linha de Varredura utilizado na solução do mesmo problema, podemos encontrar sua complexidade de espaço observando as duas estruturas de dados utilizadas. Para o estado da varredura, em dado momento ela terá no máximo um segmento armazenado para cada um existente, o que nos dá complexidade O($n$). Enquanto para a fila de eventos, poderá haver $n$ pontos superiores e $n$ pontos inferiores. Além disso, devemos contar com os pontos de interseção, que existirão no máximo $n-1$. Portanto, a fila de eventos também é O($n$). Com isso, chegamos na complexidade de espaço de O($n$) para o algoritmo.
 
-Como esse algoritmo possui tempo de execução sensível ao resultado, podemos denominar a quantidade de interseções encontradas como $k$. Dessa forma, a varredura levará um tempo de O($(n + k) \log n$), enquanto o algoritmo de força bruta leva O($n\textsuperscript{2} \log n$) para um resultado ordenado. Isso mostra a superioridade em tempo de execução do Sweep Line Algorithm. Apesar que deve-se observar que no pior caso, $k$ pode ser tão grande quanto O($n\textsuperscript{2}$), mas não é o que acontece na maioria dos casos.
+Como esse algoritmo possui tempo de execução sensível ao resultado, podemos denominar a quantidade de interseções encontradas como $k$. Dessa forma, a varredura levará um tempo de O($(n + k) \log n$), enquanto o algoritmo de força bruta leva O($n\textsuperscript{2} \log n$) para um resultado ordenado. Isso mostra a superioridade em tempo de execução do Algoritmo da Linha de Varredura. Apesar que deve-se observar que no pior caso, $k$ pode ser tão grande quanto O($n\textsuperscript{2}$), mas não é o que acontece na maioria dos casos.
 
-\section{Demais aplicações}
+\section{Outras Aplicações}
 
-A aplicação mais simples para o Sweep Line Algorithm, e também a que pode-se ver a ideia básica, é a de buscar interseções entre segmentos de linhas. Porém, seu uso não se limita a isso. Outros problemas em espaço Euclidiano podem ser resolvidos através da ideia de se utilizar uma linha de varredura que atravessa o plano, executando tarefas em determinados pontos de eventos. Como a ideia básica da foi demonstrada através de uma aplicação mais simples, aqui serão apenas citadas algumas outras aplicações interessantes em computação geométrica:
+A aplicação mais simples e de melhor visualização da ideia básica do Algoritmo da Linha de Varredura é a busca por interseções entre segmentos de linhas. Porém, seu uso não se limita a isso. Outros problemas em espaço euclidiano podem ser resolvidos através da ideia de se utilizar uma linha de varredura que atravessa o plano, executando tarefas em determinados pontos de eventos. Como a ideia básica da foi demonstrada através de uma aplicação mais simples, aqui serão apenas citadas algumas outras aplicações interessantes em computação geométrica:
 
 \begin{itemize}
-  \item Diagramas Voronoi: um algoritmo chamado Fortune's Algorithm que utiliza a técnica de Sweep Line pode ser usado para reduzir o tempo de execução de O($n\textsuperscript{2} \log n$) para O($n \log n$).
+  \item Diagramas Voronoi: um algoritmo chamado \textit{Fortune's Algorithm} que utiliza a técnica de Linha de Varredura pode ser usado para reduzir o tempo de execução de O($n\textsuperscript{2} \log n$) para O($n \log n$).
   
   \item Triangulação Delaunay.
   

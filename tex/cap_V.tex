@@ -1,11 +1,11 @@
 \chapter{Considerações Finais}
 \label{cap:consideracoes}
 
-\section{Limitações e dificuldades encontradas}
+\section{Limitações e Dificuldades Encontradas}
 
-Ao desenvolver o trabalho, a grande dificuldade encontrada foi em relação a obter dados reais para realização dos testes. Visto que a ferramenta proposta não está pronta para utilização, os dados tiveram que ser criados através de um personagem fictício. Apesar disso, os resultados com os testes realizados utilizando esses dados foram aceitáveis.
+Ao desenvolver o trabalho, a grande dificuldade encontrada foi em relação a obter dados reais para realização dos testes. Visto que a ferramenta proposta não está pronta para utilização, os dados tiveram que ser criados utilizando um personagem fictício. Apesar disso, os resultados com os testes realizados utilizando esses dados foram aceitáveis.
 
-Outra dificuldade encontrada foi na implementação das distâncias circulares entre os dias da semana e as semanas do ano. A primeira solução pensada foi a de codificar ambas as informações em código binário e utilizar a distância de Hamming de tal forma que ela tivesse o efeito circular. E para geração desses códigos, foi utilizado um algoritmo genético. No fim, concluiu-se que as tabelas de distância teriam uma implementação mais simples e mais efetiva, o que fez com que a implementação anterior fosse descartada.
+Outra dificuldade encontrada foi na implementação das distâncias circulares entre os dias da semana e as semanas do ano. A primeira solução pensada foi a de codificar ambas as informações em código binário e utilizar a distância de Hamming (mais sobre ela pode ser lido em \cite{hamming1950error}) de tal forma que ela tivesse o efeito circular. E para geração desses códigos, foi utilizado um algoritmo genético (mais sobre esse tipo de algoritmo pode ser lido em \cite{jong2006evolutionaryComputation}). No fim, concluiu-se que as tabelas de distância teriam uma implementação mais simples e mais efetiva, o que fez com que a implementação anterior fosse descartada.
 
 \section{Conclusão}
 
@@ -13,6 +13,16 @@ Este trabalho foi iniciando propondo uma ferramenta que pudesse aumentar a produ
 
 Considerando esse fim, pode-se dizer que o objetivo do trabalho foi cumprido. Com tal ferramenta proposta e tal sistema proposto neste trabalho, acredita-se que os usuários teriam grandes ganhos de produtividade em suas vidas, aprenderiam a se reeducar na execução de suas metas e conseguiriam evitar a forte tendência à procrastinação.
 
-\section{Trabalhos futuros}
+\section{Trabalhos Futuros}
 
-As tabelas utilizadas para indicar a distância entre os dias da semana foram suficientes para o propósito deste trabalho. Porém, uma melhoria a ser feita seria substituir essa tabela por um sistema mais dinâmico, que se adapte à agenda do usuário. Para esse fim, poderia ser utilizada alguma rede neural de aprendizado não supervisionado, de forma que a cada nova execução de tarefa, os dias da semana se aproximassem ou se afastassem mais, de acordo com a utilização do usuário.
+A ferramenta proposta no início deste trabalho abre possibilidade para muitos trabalhos a fim de melhorar a produtividade pessoal. Ainda neste trabalho, existem algumas melhorias a serem feitas. A seguir, são listados alguns trabalhos futuros:
+
+\begin{itemize}
+ \item As tabelas utilizadas para indicar a distância entre os dias da semana foram suficientes para o propósito deste trabalho. Porém, uma melhoria a ser feita seria substituir essa tabela por um sistema mais dinâmico, que se adapte à agenda do usuário. Para esse fim, poderia ser utilizada alguma rede neural de aprendizado não supervisionado (mais sobre isso em \cite{fausett1993neuralNetworks}), de forma que a cada nova execução de tarefa as distâncias entre os dias da semana fossem alterados de acordo com a utilização do usuário.
+ 
+ \item As categorias e metas são criadas pelo próprio usuário da ferramenta e possuem textos descritivos. Apesar de algumas categorias serem similares umas às outras, o sistema atual considera apenas igualdade. E o mesmo acontece com as metas. Para relacionar essas categorias e metas, poderia-se utilizar um sistema relacionasse as palavras encontradas, como o WordNet (mais sobre isso em \cite{wordnet2014}), criando uma fórmula que considere essas relações.
+ 
+ \item Uma mineração de dados poderia ser feita com os registros globais e de usuários específicos a fim de encontrar padrões de utilização da ferramenta.
+\end{itemize}
+
+

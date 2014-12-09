@@ -3,89 +3,89 @@
 
 Para avaliar os resultados do sistema proposto, foram criados dados de teste que simulam o histórico de execuções de um acadêmico de Engenharia de Computação. Esses dados simulam como seria o dia-a-dia de tal acadêmico entre os dias 14/06/2014 e 15/08/2014. Ou seja, tal histórico incluiria registros feitos em uma parte do primeiro semestre de 2014, as férias do meio de ano e o início do segundo semestre. A utilização desses dados ao invés de dados reais se deve à impossibilidade de obtenção de dados reais, visto que a ferramenta proposta não está pronta para utilização. Mesmo que estivesse, seria necessário um bom período de tempo coletando dados de um usuário.
 
-A Tabela \ref{tab:dadosDeTeste} mostra os dados de teste com as seguintes colunas: data, dia da semana (apenas para fins informativos), categoria, meta, início e fim da execução. Para fins de teste, um programa simples foi construído para importar esses dados e utilizar nos testes. Esse programa tem como entrada os dados de teste e a linha desejada. Ele obtém os dados da meta dessa linha, ignorando os momentos de execução já existentes e considera como se fosse uma meta agendada. Todas as linhas anteriores da tabela são consideradas como histórico de execução. Com isso, o programa executa o sistema proposto e mostra o horário em que o mesmo agendaria a notificação ao usuário. Assim, podemos comparar esse horário com o horário de início verdadeiro da execução.
+A Tabela \ref{tab:dadosDeTeste} mostra os dados de teste com as seguintes colunas: data, dia da semana (apenas para fins informativos), categoria, meta, início e fim da execução. Para fins de teste, um programa simples foi construído para importar esses dados e utilizar nos testes. Esse programa recebe como entrada os dados de teste e a linha desejada. Ele obtém os dados da meta dessa linha, ignorando os momentos de execução já existentes e considera como se fosse uma meta agendada. Todas as linhas anteriores da tabela são consideradas como histórico de execução. Com isso, o programa executa o sistema proposto e mostra o horário em que o mesmo agendaria a notificação ao usuário. Assim, podemos comparar esse horário com o horário de início verdadeiro da execução.
 
 \begin{center}
 \tablecaption{Dados de teste.}
 \label{tab:dadosDeTeste}
 \tablehead{
-  \hline & \textbf{Data} & \textbf{Dia da semana} & \textbf{Categoria} & \textbf{Meta} & \textbf{Início} & \textbf{Fim}\\
+  \hline & \textbf{Data} & \textbf{Dia} & \textbf{Categoria} & \textbf{Meta} & \textbf{Início} & \textbf{Fim}\\
 }
 \tabletail{
   \hline
 }
-\begin{supertabular}{|l|l|l|l|p{3.7cm}|l|l|}
-  \hline 01 & 14/06/14 & Sábado & Esportes & Fazer caminhada & 07:15 & 09:02\\
-  \hline 02 & 15/06/14 & Domingo & Faculdade & Estudar para prova de Administração & 11:02 & 12:25\\
-  \hline 03 & 15/06/14 & Domingo & Faculdade & Estudar para prova de Administração & 15:38 & 17:25\\
-  \hline 04 & 15/06/14 & Domingo & Faculdade & Estudar para prova de Administração & 17:45 & 20:12\\
-  \hline 05 & 16/06/14 & Segunda-feira & Faculdade & Estudar para prova de Administração & 18:23 & 19:25\\
-  \hline 06 & 16/06/14 & Segunda-feira & Faculdade & Estudar para prova de Administração & 21:12 & 22:45\\
-  \hline 07 & 18/06/14 & Quarta-feira & Esportes & Slackline & 19:27 & 20:42\\
-  \hline 08 & 18/06/14 & Quarta-feira & Livros & Game of Thrones & 22:45 & 23:59\\
-  \hline 09 & 19/06/14 & Quinta-feira & Livros & Game of Thrones & 00:00 & 00:36\\
-  \hline 10 & 19/06/14 & Quinta-feira & Faculdade & Fazer trabalho de Ciências do Ambiente & 19:02 & 19:45\\
-  \hline 11 & 19/06/14 & Quinta-feira & Faculdade & Fazer trabalho de Ciências do Ambiente & 20:26 & 21:55\\
-  \hline 12 & 19/06/14 & Quinta-feira & Faculdade & Fazer trabalho de Ciências do Ambiente & 22:05 & 23:47\\
-  \hline 13 & 21/06/14 & Sábado & Esportes & Fazer caminhada & 08:10 & 09:36\\
-  \hline 14 & 21/06/14 & Sábado & Idiomas & Estudar inglês & 11:00 & 12:12\\
-  \hline 15 & 21/06/14 & Sábado & Idiomas & Estudar inglês & 14:27 & 15:34\\
-  \hline 16 & 21/06/14 & Sábado & Faculdade & Fazer exercícios de Circuitos Elétricos & 17:45 & 19:23\\
-  \hline 17 & 24/06/14 & Terça-feira & Faculdade & Fazer exercícios de Arquitetura de Computadores & 22:07 & 23:45\\
-  \hline 18 & 25/06/14 & Quarta-feira & Esportes & Slackline & 18:53 & 20:21\\
-  \hline 19 & 25/06/14 & Quarta-feira & Livros & Game of Thrones & 22:10 & 23:45\\
-  \hline 20 & 26/06/14 & Quinta-feira & Idiomas & Estudar inglês & 21:23 & 22:58\\
-  \hline 21 & 28/06/14 & Sábado & Esportes & Fazer caminhada & 06:59 & 08:35\\
-  \hline 22 & 29/06/14 & Domingo & Faculdade & Fazer trabalho de Compiladores 1 & 21:05 & 23:19\\
-  \hline 23 & 30/06/14 & Segunda-feira & Faculdade & Fazer trabalho de Compiladores 1 & 18:20 & 20:35\\
-  \hline 24 & 30/06/14 & Segunda-feira & Faculdade & Fazer trabalho de Compiladores 1 & 21:10 & 23:18\\
-  \hline 25 & 01/07/14 & Terça-feira & Esportes & Slackline & 18:45 & 19:38\\
-  \hline 26 & 05/07/14 & Sábado & Esportes & Fazer caminhada & 09:05 & 10:43\\
-  \hline 27 & 05/07/14 & Sábado & Faculdade & Fazer trabalho de Administração & 13:45 & 15:12\\
-  \hline 28 & 05/07/14 & Sábado & Faculdade & Fazer trabalho de Administração & 16:10 & 17:45\\
-  \hline 29 & 05/07/14 & Sábado & Faculdade & Fazer trabalho de Administração & 18:20 & 19:53\\
-  \hline 30 & 05/07/14 & Sábado & Faculdade & Estudar para prova de Circuitos Elétricos & 20:23 & 21:43\\
-  \hline 31 & 05/07/14 & Sábado & Faculdade & Estudar para prova de Circuitos Elétricos & 22:00 & 23:48\\
-  \hline 32 & 06/07/14 & Domingo & Faculdade & Estudar para prova de Circuitos Elétricos & 09:10 & 11:20\\
-  \hline 33 & 06/07/14 & Domingo & Faculdade & Estudar para prova de Circuitos Elétricos & 13:20 & 15:25\\
-  \hline 34 & 06/07/14 & Domingo & Faculdade & Estudar para prova de Circuitos Elétricos & 15:57 & 17:20\\
-  \hline 35 & 06/07/14 & Domingo & Faculdade & Fazer trabalho de Arquitetura de Computadores & 20:23 & 23:57\\
-  \hline 36 & 07/07/14 & Segunda-feira & Faculdade & Fazer trabalho de Arquitetura de Computadores & 00:05 & 01:10\\
-  \hline 37 & 07/07/14 & Segunda-feira & Faculdade & Fazer trabalho de Arquitetura de Computadores & 18:23 & 20:10\\
-  \hline 38 & 07/07/14 & Segunda-feira & Faculdade & Estudar para prova de Compiladores 1 & 20:56 & 23:59\\
-  \hline 39 & 08/07/14 & Terça-feira & Faculdade & Estudar para prova de Compiladores 1 & 00:00 & 00:45\\
-  \hline 40 & 09/07/14 & Quarta-feira & Faculdade & Estudar para prova de Compiladores 1 & 12:37 & 13:48\\
-  \hline 41 & 09/07/14 & Quarta-feira & Faculdade & Estudar para prova de Ciências do Ambiente & 18:45 & 22:30\\
-  \hline 42 & 09/07/14 & Quarta-feira & Faculdade & Estudar para prova de Ciências do Ambiente & 22:56 & 23:25\\
-  \hline 43 & 10/07/14 & Quinta-feira & Faculdade & Estudar para prova de Ciências do Ambiente & 12:36 & 13:42\\
-  \hline 44 & 16/07/14 & Quarta-feira & Esportes & Slackline & 09:23 & 11:01\\
-  \hline 45 & 16/07/14 & Quarta-feira & Livros & Game of Thrones & 18:23 & 21:30\\
-  \hline 46 & 16/07/14 & Quarta-feira & Livros & Game of Thrones & 22:10 & 23:59\\
-  \hline 47 & 17/07/14 & Quinta-feira & Livros & Game of Thrones & 00:00 & 02:23\\
-  \hline 48 & 17/07/14 & Quinta-feira & Livros & Game of Thrones & 11:02 & 12:25\\
-  \hline 49 & 17/07/14 & Quinta-feira & Livros & Game of Thrones & 18:45 & 22:17\\
-  \hline 50 & 19/07/14 & Sábado & Idiomas & Estudar inglês & 15:12 & 15:45\\
-  \hline 51 & 19/07/14 & Sábado & Livros & Game of Thrones & 21:10 & 23:54\\
-  \hline 52 & 20/07/14 & Domingo & Esportes & Fazer caminhada & 10:20 & 11:25\\
-  \hline 53 & 20/07/14 & Domingo & Idiomas & Estudar inglês & 18:00 & 19:12\\
-  \hline 54 & 21/07/14 & Segunda-feira & Esportes & Academia & 09:02 & 10:43\\
-  \hline 55 & 22/07/14 & Terça-feira & Esportes & Slackline & 09:20 & 10:45\\
-  \hline 56 & 23/07/14 & Quarta-feira & Esportes & Academia & 08:53 & 10:35\\
-  \hline 57 & 24/07/14 & Quinta-feira & Livros & Game of Thrones & 18:59 & 22:26\\
-  \hline 58 & 25/07/14 & Sexta-feira & Esportes & Academia & 09:15 & 11:02\\
-  \hline 59 & 26/07/14 & Sábado & Idiomas & Estudar inglês & 15:34 & 16:57\\
-  \hline 60 & 30/07/14 & Quarta-feira & Esportes & Academia & 08:30 & 09:53\\
-  \hline 61 & 31/07/14 & Quinta-feira & Esportes & Slackline & 09:37 & 10:55\\
-  \hline 62 & 01/08/14 & Sexta-feira & Livros & Game of Thrones & 22:15 & 23:59\\
-  \hline 63 & 02/08/14 & Sábado & Livros & Game of Thrones & 00:00 & 01:38\\
-  \hline 64 & 02/08/14 & Sábado & Esportes & Slackline & 17:30 & 18:46\\
-  \hline 65 & 03/08/14 & Domingo & Idiomas & Estudar inglês & 18:30 & 20:02\\
-  \hline 66 & 06/08/14 & Quarta-feira & Esportes & Academia & 08:50 & 10:23\\
-  \hline 67 & 08/08/14 & Sexta-feira & Esportes & Academia & 08:15 & 10:05\\
-  \hline 68 & 09/08/14 & Sábado & Idiomas & Estudar inglês & 10:30 & 11:54\\
-  \hline 69 & 12/08/14 & Terça-feira & Faculdade & Fazer exercícios de Engenharia de Software 1 & 10:20 & 11:58\\
-  \hline 70 & 14/08/14 & Quinta-feira & Faculdade & Fazer exercícios de Resistência dos Materiais 1 & 09:10 & 11:23\\
-  \hline 71 & 15/08/14 & Sexta-feira & Esportes & Academia & 09:35 & 10:47\\
+\begin{supertabular}{|l|l|l|l|p{5.5cm}|l|l|}
+  \hline 01 & 14/06/14 & Sáb & Esportes & Fazer caminhada & 07:15 & 09:02\\
+  \hline 02 & 15/06/14 & Dom & Faculdade & Prova de Administração & 11:02 & 12:25\\
+  \hline 03 & 15/06/14 & Dom & Faculdade & Prova de Administração & 15:38 & 17:25\\
+  \hline 04 & 15/06/14 & Dom & Faculdade & Prova de Administração & 17:45 & 20:12\\
+  \hline 05 & 16/06/14 & Seg & Faculdade & Prova de Administração & 18:23 & 19:25\\
+  \hline 06 & 16/06/14 & Seg & Faculdade & Prova de Administração & 21:12 & 22:45\\
+  \hline 07 & 18/06/14 & Qua & Esportes & Slackline & 19:27 & 20:42\\
+  \hline 08 & 18/06/14 & Qua & Livros & Game of Thrones & 22:45 & 23:59\\
+  \hline 09 & 19/06/14 & Qui & Livros & Game of Thrones & 00:00 & 00:36\\
+  \hline 10 & 19/06/14 & Qui & Faculdade & Trabalho de Ciências do Ambiente & 19:02 & 19:45\\
+  \hline 11 & 19/06/14 & Qui & Faculdade & Trabalho de Ciências do Ambiente & 20:26 & 21:55\\
+  \hline 12 & 19/06/14 & Qui & Faculdade & Trabalho de Ciências do Ambiente & 22:05 & 23:47\\
+  \hline 13 & 21/06/14 & Sáb & Esportes & Fazer caminhada & 08:10 & 09:36\\
+  \hline 14 & 21/06/14 & Sáb & Idiomas & Estudar inglês & 11:00 & 12:12\\
+  \hline 15 & 21/06/14 & Sáb & Idiomas & Estudar inglês & 14:27 & 15:34\\
+  \hline 16 & 21/06/14 & Sáb & Faculdade & Exercícios de Circuitos Elétricos & 17:45 & 19:23\\
+  \hline 17 & 24/06/14 & Ter & Faculdade & Exercícios de Arquitetura de Computadores & 22:07 & 23:45\\
+  \hline 18 & 25/06/14 & Qua & Esportes & Slackline & 18:53 & 20:21\\
+  \hline 19 & 25/06/14 & Qua & Livros & Game of Thrones & 22:10 & 23:45\\
+  \hline 20 & 26/06/14 & Qui & Idiomas & Estudar inglês & 21:23 & 22:58\\
+  \hline 21 & 28/06/14 & Sáb & Esportes & Fazer caminhada & 06:59 & 08:35\\
+  \hline 22 & 29/06/14 & Dom & Faculdade & Trabalho de Compiladores 1 & 21:05 & 23:19\\
+  \hline 23 & 30/06/14 & Seg & Faculdade & Trabalho de Compiladores 1 & 18:20 & 20:35\\
+  \hline 24 & 30/06/14 & Seg & Faculdade & Trabalho de Compiladores 1 & 21:10 & 23:18\\
+  \hline 25 & 01/07/14 & Ter & Esportes & Slackline & 18:45 & 19:38\\
+  \hline 26 & 05/07/14 & Sáb & Esportes & Fazer caminhada & 09:05 & 10:43\\
+  \hline 27 & 05/07/14 & Sáb & Faculdade & Trabalho de Administração & 13:45 & 15:12\\
+  \hline 28 & 05/07/14 & Sáb & Faculdade & Trabalho de Administração & 16:10 & 17:45\\
+  \hline 29 & 05/07/14 & Sáb & Faculdade & Trabalho de Administração & 18:20 & 19:53\\
+  \hline 30 & 05/07/14 & Sáb & Faculdade & Prova de Circuitos Elétricos & 20:23 & 21:43\\
+  \hline 31 & 05/07/14 & Sáb & Faculdade & Prova de Circuitos Elétricos & 22:00 & 23:48\\
+  \hline 32 & 06/07/14 & Dom & Faculdade & Prova de Circuitos Elétricos & 09:10 & 11:20\\
+  \hline 33 & 06/07/14 & Dom & Faculdade & Prova de Circuitos Elétricos & 13:20 & 15:25\\
+  \hline 34 & 06/07/14 & Dom & Faculdade & Prova de Circuitos Elétricos & 15:57 & 17:20\\
+  \hline 35 & 06/07/14 & Dom & Faculdade & Trabalho de Arquitetura de Computadores & 20:23 & 23:57\\
+  \hline 36 & 07/07/14 & Seg & Faculdade & Trabalho de Arquitetura de Computadores & 00:05 & 01:10\\
+  \hline 37 & 07/07/14 & Seg & Faculdade & Trabalho de Arquitetura de Computadores & 18:23 & 20:10\\
+  \hline 38 & 07/07/14 & Seg & Faculdade & Prova de Compiladores 1 & 20:56 & 23:59\\
+  \hline 39 & 08/07/14 & Ter & Faculdade & Prova de Compiladores 1 & 00:00 & 00:45\\
+  \hline 40 & 09/07/14 & Qua & Faculdade & Prova de Compiladores 1 & 12:37 & 13:48\\
+  \hline 41 & 09/07/14 & Qua & Faculdade & Prova de Ciências do Ambiente & 18:45 & 22:30\\
+  \hline 42 & 09/07/14 & Qua & Faculdade & Prova de Ciências do Ambiente & 22:56 & 23:25\\
+  \hline 43 & 10/07/14 & Qui & Faculdade & Prova de Ciências do Ambiente & 12:36 & 13:42\\
+  \hline 44 & 16/07/14 & Qua & Esportes & Slackline & 09:23 & 11:01\\
+  \hline 45 & 16/07/14 & Qua & Livros & Game of Thrones & 18:23 & 21:30\\
+  \hline 46 & 16/07/14 & Qua & Livros & Game of Thrones & 22:10 & 23:59\\
+  \hline 47 & 17/07/14 & Qui & Livros & Game of Thrones & 00:00 & 02:23\\
+  \hline 48 & 17/07/14 & Qui & Livros & Game of Thrones & 11:02 & 12:25\\
+  \hline 49 & 17/07/14 & Qui & Livros & Game of Thrones & 18:45 & 22:17\\
+  \hline 50 & 19/07/14 & Sáb & Idiomas & Estudar inglês & 15:12 & 15:45\\
+  \hline 51 & 19/07/14 & Sáb & Livros & Game of Thrones & 21:10 & 23:54\\
+  \hline 52 & 20/07/14 & Dom & Esportes & Fazer caminhada & 10:20 & 11:25\\
+  \hline 53 & 20/07/14 & Dom & Idiomas & Estudar inglês & 18:00 & 19:12\\
+  \hline 54 & 21/07/14 & Seg & Esportes & Academia & 09:02 & 10:43\\
+  \hline 55 & 22/07/14 & Ter & Esportes & Slackline & 09:20 & 10:45\\
+  \hline 56 & 23/07/14 & Qua & Esportes & Academia & 08:53 & 10:35\\
+  \hline 57 & 24/07/14 & Qui & Livros & Game of Thrones & 18:59 & 22:26\\
+  \hline 58 & 25/07/14 & Sex & Esportes & Academia & 09:15 & 11:02\\
+  \hline 59 & 26/07/14 & Sáb & Idiomas & Estudar inglês & 15:34 & 16:57\\
+  \hline 60 & 30/07/14 & Qua & Esportes & Academia & 08:30 & 09:53\\
+  \hline 61 & 31/07/14 & Qui & Esportes & Slackline & 09:37 & 10:55\\
+  \hline 62 & 01/08/14 & Sex & Livros & Game of Thrones & 22:15 & 23:59\\
+  \hline 63 & 02/08/14 & Sáb & Livros & Game of Thrones & 00:00 & 01:38\\
+  \hline 64 & 02/08/14 & Sáb & Esportes & Slackline & 17:30 & 18:46\\
+  \hline 65 & 03/08/14 & Dom & Idiomas & Estudar inglês & 18:30 & 20:02\\
+  \hline 66 & 06/08/14 & Qua & Esportes & Academia & 08:50 & 10:23\\
+  \hline 67 & 08/08/14 & Sex & Esportes & Academia & 08:15 & 10:05\\
+  \hline 68 & 09/08/14 & Sáb & Idiomas & Estudar inglês & 10:30 & 11:54\\
+  \hline 69 & 12/08/14 & Ter & Faculdade & Exercícios de Engenharia de Software 1 & 10:20 & 11:58\\
+  \hline 70 & 14/08/14 & Qui & Faculdade & Exercícios de Resistência dos Materiais 1 & 09:10 & 11:23\\
+  \hline 71 & 15/08/14 & Sex & Esportes & Academia & 09:35 & 10:47\\
   \hline
 \end{supertabular}
 \end{center}
@@ -93,26 +93,26 @@ A Tabela \ref{tab:dadosDeTeste} mostra os dados de teste com as seguintes coluna
 Para avaliar o comportamento do algoritmo, foram sorteadas dez linhas da Tabela \ref{tab:dadosDeTeste} para servir de entrada ao programa de teste. Cada um desses resultados serão avaliados a seguir com uma explicação sobre o mesmo.
 
 \begin{description}
- \item[Linha 02] \hfill \\
-  Por ser a segunda execução da lista, o histórico de execuções passadas contém uma única execução. Portanto, como era de se esperar, o algoritmo retorna como resultado o momento de início dessa execução presente no histórico: 07:15.
- \item[Linha 07] \hfill \\
-  Anterior à essa meta, existe uma única meta de mesma categoria. Por esse motivo, sua relevância é considerada maior que das outras execuções anteriores e o momento de início da mesma é retornado como resultado: 07:15.
- \item[Linha 10] \hfill \\
-  Nesse ponto, uma considerável quantidade de metas de mesma categorias foram executadas. Assim, o sistema começa a retornar um resultado próximo da execução real. Para esse caso, uma notificação seria agendada para 18:23, enquanto essa linha apresenta momento de início de 19:02.
- \item[Linha 21] \hfill \\
-  A meta de fazer caminhada foi realizada algumas vezes anteriormente a esse registro. O resultado apresentado pelo sistema foi de 08:10, enquanto o registro apresenta inicio às 06:59. Essa diferença pode ser explicada devido à linha 13, que possui a mesma meta, foi realizada no mesmo dia da semana e é o registro mais atual de execução de tal meta. Assim, esse registro teve peso determinante no resultado do sistema.
- \item[Linha 23] \hfill \\
-  Para essa linha, o resultado apresentado pelo sistema foi de 22:10, enquanto o apresentado no registro foi de 18:20. Essa diferença considerável se deve à grande quantidade de execuções de metas de mesma categoria por volta das 22 horas no histórico. Comparando essa execução com as anteriores, pode-se notar que essa foi a realizada mais cedo.
- \item[Linha 28] \hfill \\
-  Devido à maior presença de execuções de mesma categoria no meio de semana, o qual costuma acontecer mais tarde, o resultado do sistema foi mais tarde do que o apresentado pelo registro. O sistema apresentou 19:02, enquanto o registro apresentou 16:10.
- \item[Linha 46] \hfill \\
-  Nessa linha, houve a resposta do sistema foi próxima à apresentada no registro. Enquanto o registro apresentou 22:10, o sistema sugeriu 22:56.
- \item[Linha 51] \hfill \\
-  Assim como a linha de teste anterior, de mesma meta, o resultado do sistema foi razoavelmente próximo. Enquanto o registro apresentou 21:10, o sistema sugeriu 22:10, o horário de execução da Linha 46, que foi a execução mais recente e que acabou tendo maior peso.
- \item[Linha 59] \hfill \\
-  O resultado apresentado para essa meta foi muito bom, visto que o sistema sugeriu 15:12 e o registro apresentou 15:34, que são horários bem próximos.
- \item[Linha 67] \hfill \\
-  Essa linha demonstrou resultado razoável, visto que o registro apresentou 08:15 e o sistema sugeriu 09:37.
+ \item[Linha 02. Registro: 11h02min - 12h25min. Resultado: 07h15min] \hfill \\
+  Por ser a segunda execução da lista, o histórico de execuções passadas contém uma única execução. Portanto, como era de se esperar, o algoritmo retorna como resultado o momento de início dessa execução presente no histórico.
+ \item[Linha 07. Registro: 19h27min - 20h42min. Resultado: 07h15min] \hfill \\
+  Anterior à essa meta, existe uma única meta de mesma categoria. Por esse motivo, sua relevância é considerada maior que das outras execuções anteriores e o momento de início da mesma é retornado como resultado.
+ \item[Linha 10. Registro: 19h02min - 19h45min. Resultado: 18h23min] \hfill \\
+  Nesse ponto, uma considerável quantidade de metas de mesma categorias foram executadas. Assim, o sistema começa a retornar um resultado próximo da execução real.
+ \item[Linha 21. Registro: 06h59min - 08h35min. Resultado: 08h10min] \hfill \\
+  A meta de fazer caminhada foi realizada algumas vezes anteriormente a esse registro. A pequena diferença apresentada pode ser explicada pela linha 13, que possui a mesma meta, foi realizada no mesmo dia da semana e é o registro mais atual de execução de tal meta. Isso torna esse registro muito relevante, o que foi determinante no resultado do sistema.
+ \item[Linha 23. Registro: 18h20min - 20h35min. Resultado: 22h10min] \hfill \\
+  A diferença considerável encontrada entre o resultado e o que foi realmente executado se deve à grande quantidade de execuções de metas de mesma categoria por volta das 22 horas no histórico. Comparando essa execução com as anteriores, pode-se notar que essa foi a realizada mais cedo.
+ \item[Linha 28. Registro: 16h10min - 17h45min. Resultado: 19h02min] \hfill \\
+  Devido à maior presença de execuções de mesma categoria no meio de semana, o qual costuma acontecer mais tarde, o resultado do sistema foi mais tarde do que o apresentado pelo registro.
+ \item[Linha 46. Registro: 22h10min - 23h59min. Resultado: 22h56min] \hfill \\
+  O resultado dado pelo sistema é razoavelmente próximo ao esperado pelo registro.
+ \item[Linha 51. Registro: 21h10min - 23h54min. Resultado: 22h10min] \hfill \\
+  Assim como a linha de teste anterior, de mesma meta, o resultado do sistema foi razoavelmente próximo. O horário de execução da Linha 46, que foi a execução mais recente, teve grande peso nesse resultado.
+ \item[Linha 59. Registro: 15h34min - 16h57min. Resultado: 15h12min] \hfill \\
+  O resultado apresentado para essa meta foi muito bom devido à proximidade com o tempo esperado.
+ \item[Linha 67. Registro: 08h15min - 10h05min. Resultado: 09h37min] \hfill \\
+  Nesse caso, o resultado também foi razoavelmente próximo ao esperado.
 \end{description}
 
-Através desses testes, pode-se concluir que os resultados do sistema foram aceitáveis. Em alguns casos, houve uma certa variação entre o resultado esperado e o resultado apresentado para o sistema. Mas, no geral, não houve variações tão grandes e injustificáveis. Vale lembrar que esses são dados simulados e não dados reais. Tal sistema precisaria ainda de uma validação real após um longo tempo de utilização por usuários reais.
+Através desses testes, pode-se concluir que os resultados do sistema foram bons. Ignorando as duas primeiras linhas avaliadas, que tiveram grande diferença entre o registro e o resultado devido às razões explicadas anteriormente, na maioria dos casos o resultado do sistema foi próximo ao momento inicial do registro ou pelo menos dentro da faixa de tempo do mesmo. As variações encontradas se devem a algumas alterações de padrões na execuções, de tal forma que o sistema retornou como resposta a faixa de valores onde houve mais execuções recentes e o registro avaliado acabou quebrando um pouco o padrão. Vale lembrar que esses são dados simulados e não dados reais. Tal sistema precisaria ainda de uma validação real após um longo tempo de utilização por usuários reais.
