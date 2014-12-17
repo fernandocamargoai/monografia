@@ -476,7 +476,7 @@
       Trabalho de Conclusão de Curso}}} em Formato Eletrônico}%
   \vspace*{30pt}%
   \par%
-  Na qualidade de titular dos direitos de autor, \textbf{AUTORIZO} o
+  Na qualidade de titular dos direitos de autor, \textbf{AUTORIZO} a
   \@unidade\ da \@universidade\ -- \@uni\ a reproduzir, inclusive em outro formato
   ou m\'{i}dia e atrav\'es de armazenamento permanente ou tempor\'ario, bem como a publicar
   na rede mundial de computadores (\textit{Internet}) e na biblioteca virtual da \@uni,
